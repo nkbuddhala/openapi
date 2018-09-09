@@ -1,0 +1,374 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based coping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadatan
+info:
+  version: "0.0.1"
+  title: Fintech APIs
+  description: |
+    The fintech deposit account transactions api.
+    
+host: eastern-test-dev.apigee.net
+basePath: /fintech-apis/v1
+schemes:
+  - https
+  
+securityDefinitions:
+   OAuth2:
+    type: oauth2
+    tokenUrl: https://eastern-test-dev.apigee.net/oauth/client_credential/accesstoken?grant_type=client_credentials
+    flow: application
+    scopes: 
+      read: The read call
+
+security:
+  - OAuth2: [read]
+# Describe your paths here
+paths:
+  # The operation to fetch multiple transactions.
+  /transactions:
+    # This is a HTTP operation
+    get:
+      # Describe this operation here.
+      summary: Returns the filtered list of transactions.
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Gets the list of `Transaction` object.
+      #    # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is require
+        -
+          name: customerNumber
+          in: header
+          description: customer number
+          required: false
+          type: string
+        -
+          name: accountNumber
+          in: header
+          description: account number
+          required: false
+          type: string
+        -
+          name: fromDate
+          in: query
+          description: from date
+          required: false
+          type: string
+        -
+          name: toDate
+          in: query
+          description: from date
+          required: false
+          type: string
+        -
+          name: contextId
+          in: header
+          description: the client context id
+          required: true
+          type: string
+        -
+          name: source
+          in: header
+          description: the source name to identify sender
+          required: true
+          type: string
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: Transaction
+            type: object
+            properties:
+              customerNumber:
+                type: integer
+                example: 1234
+              accountNumber:
+                type: integer
+                example: 1122
+              accountType:
+                type: string
+                example: "Savings Account"
+              id:
+                type: integer
+                example: 1234567890
+              type:
+                type: string
+                example: "Credit"
+              time:
+                type: string
+                example: "2014-03-31T00:00:00"
+              amount:
+                type: number
+                format: double
+                example: 0.11
+              description:
+                type: string
+                example: "INTEREST CREDIT"
+        401:
+          description: Unauthorized response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: Fault
+            type: object
+            properties:
+              fault:
+                type: object
+                properties:
+                  faultstring:
+                   type: string
+                   example: "Invalid access token"
+                  detail:
+                    type: object
+                    properties:
+                      errorcode:
+                        type: string
+                        example: "oauth.v2.InvalidAccessToken"
+              
+  # The operation to fetch single transaction.
+  /transactions/{transactionId}:
+    # This is a HTTP operation
+    get:
+      # Describe this operation here.
+      summary: Returns the single transaction object.
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Gets the single `Transaction` object.
+      #    # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is require
+        -
+          name: transactionId
+          in: path
+          description: transaction id
+          required: true
+          type: string
+        -
+          name: contextId
+          in: header
+          description: the client context id
+          required: true
+          type: string
+        -
+          name: source
+          in: header
+          description: the source name to identify sender
+          required: true
+          type: string
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: Transaction
+            type: object
+            properties:
+              customerNumber:
+                type: integer
+                example: 1234
+              accountNumber:
+                type: integer
+                example: 1122
+              accountType:
+                type: string
+                example: "Savings Account"
+              id:
+                type: integer
+                example: 1234567890
+              type:
+                type: string
+                example: "Credit"
+              time:
+                type: string
+                example: "2014-03-31T00:00:00"
+              amount:
+                type: number
+                format: double
+                example: 0.11
+              description:
+                type: string
+                example: "INTEREST CREDIT"
+        401:
+          description: Unauthorized response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: Fault
+            type: object
+            properties:
+              fault:
+                type: object
+                properties:
+                  faultstring:
+                   type: string
+                   example: "Invalid access token"
+                  detail:
+                    type: object
+                    properties:
+                      errorcode:
+                        type: string
+                        example: "oauth.v2.InvalidAccessToken"
+  # The operation to fetch the list of customers.
+  /customers:
+    # This is a HTTP operation
+    get:
+      # Describe this operation here.
+      summary: Returns the list of customers.
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Gets the list of `Customer` object.
+      #    # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is require
+        -
+          name: customerNumber
+          in: header
+          description: customer number
+          required: false
+          type: string
+        -
+          name: contextId
+          in: header
+          description: the client context id
+          required: true
+          type: string
+        -
+          name: source
+          in: header
+          description: the source name to identify sender
+          required: true
+          type: string
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: Customer
+            type: object
+            properties:
+              customerNumber:
+                type: integer
+                example: 1234
+              zipCode:
+                type: string
+                example: "011231234"
+        401:
+          description: Unauthorized response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: Fault
+            type: object
+            properties:
+              fault:
+                type: object
+                properties:
+                  faultstring:
+                   type: string
+                   example: "Invalid access token"
+                  detail:
+                    type: object
+                    properties:
+                      errorcode:
+                        type: string
+                        example: "oauth.v2.InvalidAccessToken"
+  
+  # The operation to fetch accounts.
+  /accounts:
+    # This is a HTTP operation
+    get:
+      # Describe this operation here.
+      summary: Returns the list of accounts.
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Gets the list of `Account` object.
+      #    # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is require
+        -
+          name: customerNumber
+          in: header
+          description: customer number
+          required: false
+          type: string
+        -
+          name: accountNumber
+          in: header
+          description: account number
+          required: false
+          type: string
+        -
+          name: contextId
+          in: header
+          description: the client context id
+          required: true
+          type: string
+        -
+          name: source
+          in: header
+          description: the source name to identify sender
+          required: true
+          type: string
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: Customer
+            type: object
+            properties:
+              customerNumber:
+                type: integer
+                example: 1234
+              accountNumber:
+                type: integer
+                example: 1122
+              accountTypeDescription:
+                type: string
+                example: "Savings Account" 
+              openedDate:
+                type: string
+                example: "2010-09-09T00:00:00"
+              closedate:
+                type: string
+                example: "2010-09-09T00:00:00"
+              interestRate:
+                type: number
+                format: double
+                example: 0.02
+        401:
+          description: Unauthorized response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            title: Fault
+            type: object
+            properties:
+              fault:
+                type: object
+                properties:
+                  faultstring:
+                   type: string
+                   example: "Invalid access token"
+                  detail:
+                    type: object
+                    properties:
+                      errorcode:
+                        type: string
+                        example: "oauth.v2.InvalidAccessToken"
